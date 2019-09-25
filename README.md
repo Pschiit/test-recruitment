@@ -16,7 +16,7 @@ From Command line:
 
 From the documentation at the following address "http://localhost:53333/swagger", simply click on Player to access the controller request, select the one you want and click on "Try it out" on the top right.
 
-You will be able to enter parameters if required then simply click execute and your response will appear in the "Responses" section under "Server response".
+You will be able to enter parameters if required then simply click execute and your response will appear in the "Responses" section under "Server response". **The database is reset to its default state at every runtime.**
 
 To launch the test:
 
