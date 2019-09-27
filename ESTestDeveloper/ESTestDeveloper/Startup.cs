@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ESTestDeveloper.Libraries;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO;
 
 namespace ESTestDeveloper
 {
@@ -44,9 +44,7 @@ namespace ESTestDeveloper
 
             app.UseMvc();
 
-            //reset the database at runtime
-            File.Delete(@".\Resources\database.json");
-            File.Copy(@".\Resources\headtohead.json", @".\Resources\database.json");
+            JsonManager.InitializeDatabase();
         }
     }
 }

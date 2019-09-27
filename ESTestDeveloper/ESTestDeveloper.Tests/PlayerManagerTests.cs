@@ -1,32 +1,37 @@
 using ESTestDeveloper.Libraries;
+using ESTestDeveloper.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ESTestDeveloper.Tests
 {
     [TestClass]
     public class PlayerManagerTests
     {
+        [TestInitialize]
+        public void InitializeTest()
+        {
+            JsonManager.InitializeDatabase();
+        }
+
         [TestMethod]
         public void GetAllPlayersTest()
         {
             var result = PlayerManager.GetAllPlayers();
-            Assert.IsNotNull(result);
-            if (result.Count > 1)
-                Assert.IsTrue(result[0].Id < result[1].Id);
-        }
 
+            Assert.IsNotNull(result);
+            CollectionAssert.AllItemsAreNotNull(result);
+            var orderedList = new List<Player>(result);
+            orderedList = orderedList.OrderBy(p => p.Id).ToList();
+            CollectionAssert.AreEqual(orderedList, result);
+        }
         [TestMethod]
         public void GetPlayerByIdTest()
         {
-            //Get ID of first player in database to test with a valid id
-            var players = PlayerManager.GetAllPlayers();
-            Assert.IsNotNull(players);
-            Assert.IsTrue(players.Count > 0);
-            var player = players[0];
-            Assert.IsNotNull(player);
-            var id = player.Id;
-
+            var id = 52;
             var result = PlayerManager.GetPlayersById(id);
+
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Id == id);
         }
@@ -35,21 +40,16 @@ namespace ESTestDeveloper.Tests
         {
             var id = 51;
             var result = PlayerManager.GetPlayersById(id);
+
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void DeletePlayerByIdTest()
         {
-            //Get ID of first player in database to test with a valid id
-            var players = PlayerManager.GetAllPlayers();
-            Assert.IsNotNull(players);
-            Assert.IsTrue(players.Count > 0);
-            var player = players[0];
-            Assert.IsNotNull(player);
-            var id = player.Id;
-
+            var id = 52;
             var result = PlayerManager.DeletePlayerById(id);
+
             Assert.IsTrue(result);
             Assert.IsNull(PlayerManager.GetPlayersById(id));
         }
@@ -57,8 +57,7 @@ namespace ESTestDeveloper.Tests
         public void DeletePlayerByIdFailingTest()
         {
             var id = 51;
-            var player = PlayerManager.GetPlayersById(id);
-            Assert.IsNull(player);
+
             var result = PlayerManager.DeletePlayerById(id);
             Assert.IsFalse(result);
         }
